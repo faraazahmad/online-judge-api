@@ -19,7 +19,7 @@ func (s *server) Ruby(ctx context.Context, request *proto.Request) (*proto.Respo
 
 	/*
 		Code has to be downloaded in
-		/home/${whoami}/remote/temp.rb
+		/home/${whoami}/remote/ruby/temp.rb
 	*/
 
 	// get home directory of current user
@@ -27,21 +27,24 @@ func (s *server) Ruby(ctx context.Context, request *proto.Request) (*proto.Respo
 	if err != nil {
 		return nil, err
 	}
-	// generate string for destination
-	destinationString := fmt.Sprintf("%s/remote/temp.rb", homeDir)
+	// generate string for destination (in UNIX based systems)
+	destinationString := fmt.Sprintf("%s/remote/ruby/temp.rb", homeDir)
 
 	// download file in the provided destination
 	wget.Wget(codeURL, destinationString)
 
-	// TODO: execute the code with provided params
 	// get Command struct instance by passing command name and arguments
 	cmd := exec.Command("ruby", args...)
 
+	// provide stdin to command
+	var Stdin bytes.Buffer
+	cmd.Stdin = &Stdin
+
+	// store cmd.Stdout in a Bytes buffer
 	var Stdout bytes.Buffer
-	// point cmd.Stdout to output buffer
 	cmd.Stdout = &Stdout
 
-	// run the command and capture output
+	// run the command
 	err = cmd.Run()
 	if err != nil {
 		return nil, err

@@ -3,10 +3,11 @@ syntax = "proto3";
 message Request {
     string codeURL = 1; // the URL containing the code to be executed
     repeated string args = 2; // the params to pass to the compiler/interpreter
+    bytes stdin = 3;
 }
 
 message Response {
-    repeated bytes body = 2; // the body of the output
+    bytes body = 2; // the body of the output
 }
 
 service ExecService {
