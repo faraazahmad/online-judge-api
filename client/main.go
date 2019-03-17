@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strconv"
+	"strings"
 
 	proto "../proto"
 	"github.com/gin-gonic/gin"
@@ -20,19 +20,11 @@ func main() {
 	client := proto.NewExecServiceClient(conn)
 	g := gin.Default()
 
-	g.GET("/add/:a/:b", func(ctx *gin.Context) {
-		a, err := strconv.ParseUint(ctx.Param("a"), 10, 64)
-		if err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid parameter A"})
-			return
-		}
-		b, err := strconv.ParseUint(ctx.Param("b"), 10, 64)
-		if err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid parameter B"})
-			return
-		}
+	g.GET("/ruby/:url/:args", func(ctx *gin.Context) {
+		url := ctx.Param("url")
+		args := strings.Split(ctx.Param("args"), ",")
 
-		req := &proto.Request{A: int64(a), B: int64(b)}
+		req := &proto.Request{CodeURL: url, Args: args}
 		if response, err := client.Ruby(ctx, req); err == nil {
 			ctx.JSON(http.StatusOK, gin.H{
 				"result": fmt.Sprintf("%d", response.Result),

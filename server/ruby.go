@@ -37,8 +37,7 @@ func (s *server) Ruby(ctx context.Context, request *proto.Request) (*proto.Respo
 	cmd := exec.Command("ruby", args...)
 
 	// provide stdin to command
-	var Stdin bytes.Buffer
-	cmd.Stdin = &Stdin
+	cmd.Stdin = bytes.NewReader(request.GetStdin())
 
 	// store cmd.Stdout in a Bytes buffer
 	var Stdout bytes.Buffer
