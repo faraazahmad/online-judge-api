@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"net"
 
 	proto "../proto"
@@ -25,4 +26,9 @@ func main() {
 	if e := srv.Serve(listener); e != nil {
 		panic(e)
 	}
+}
+
+func (s *server) Ruby(ctx context.Context, request *proto.Request) (*proto.Response, error) {
+	codeURL, params := request.GetCodeURL(), request.GetParams()
+	return nil, nil
 }
