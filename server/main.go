@@ -5,6 +5,7 @@ import (
 	"net"
 
 	proto "../proto"
+	"../wget"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
@@ -31,7 +32,8 @@ func main() {
 func (s *server) Ruby(ctx context.Context, request *proto.Request) (*proto.Response, error) {
 	codeURL, params := request.GetCodeURL(), request.GetParams()
 
-	// TODO: Donload the code
+	// TODO: Download the code in /home/${whoami}/remote
+	wget.Wget(codeURL, "")
 
 	// TODO: execute the code with provided params
 
