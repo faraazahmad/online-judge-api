@@ -30,5 +30,16 @@ func main() {
 
 func (s *server) Ruby(ctx context.Context, request *proto.Request) (*proto.Response, error) {
 	codeURL, params := request.GetCodeURL(), request.GetParams()
+
+	// TODO: Donload the code
+
+	// TODO: execute the code with provided params
+
+	// TODO: Capture the output
+
+	// TODO: check if there was an error
+
+	// TODO: return the full response
+
 	return nil, nil
 }
