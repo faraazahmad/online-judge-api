@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"net"
 	"os/user"
 
@@ -19,7 +20,7 @@ type User struct {
 	// On POSIX systems, this is a decimal number representing the uid.
 	// On Windows, this is a security identifier (SID) in a string format.
 	// On Plan 9, this is the contents of /dev/user.
-	UID string
+	Uid string
 	// Gid is the primary group ID.
 	// On POSIX systems, this is a decimal number representing the gid.
 	// On Windows, this is a SID in a string format.
@@ -58,13 +59,21 @@ func main() {
 func (s *server) Ruby(ctx context.Context, request *proto.Request) (*proto.Response, error) {
 	codeURL, params := request.GetCodeURL(), request.GetParams()
 
-	// TODO: Download the code in /home/${whoami}/remote
-	// username of current user
-	currentUser, err := user.Current()
+	/*
+		Code has to be downloaded in
+		/home/${whoami}/remote/temp.rb
+	*/
+
+	// get home directory of current user
+	homeDir, err := user.Current()
 	if err != nil {
 		panic(err)
 	}
-	wget.Wget(codeURL, "")
+	// generate string for destination
+	destinationString := fmt.Sprintf("%s/remote/temp.rb", homeDir)
+
+	// download file in the provided destination
+	wget.Wget(codeURL, destinationString)
 
 	// TODO: execute the code with provided params
 
