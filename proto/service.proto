@@ -2,12 +2,12 @@ syntax = "proto3";
 
 message Request {
     string codeURL = 1; // the URL containing the code to be executed
-    repeated string params = 2; // the params to pass to the compiler/interpreter
+    repeated string args = 2; // the params to pass to the compiler/interpreter
 }
 
 message Response {
     bool hasError = 1; // boolean to check whether the output has an error
-    string body = 2; // the body of the output
+    bytes body = 2; // the body of the output
 }
 
 service ExecService {

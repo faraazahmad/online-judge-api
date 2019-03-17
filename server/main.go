@@ -3,7 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
 	"net"
+	"os"
+	"os/exec"
 	"os/user"
 
 	proto "../proto"
@@ -13,31 +16,6 @@ import (
 )
 
 type server struct{}
-
-// User : struct to hold info about current user
-type User struct {
-	// Uid is the user ID.
-	// On POSIX systems, this is a decimal number representing the uid.
-	// On Windows, this is a security identifier (SID) in a string format.
-	// On Plan 9, this is the contents of /dev/user.
-	Uid string
-	// Gid is the primary group ID.
-	// On POSIX systems, this is a decimal number representing the gid.
-	// On Windows, this is a SID in a string format.
-	// On Plan 9, this is the contents of /dev/user.
-	Gid string
-	// Username is the login name.
-	Username string
-	// Name is the user's real or display name.
-	// It might be blank.
-	// On POSIX systems, this is the first (or only) entry in the GECOS field
-	// list.
-	// On Windows, this is the user's display name.
-	// On Plan 9, this is the contents of /dev/user.
-	Name string
-	// HomeDir is the path to the user's home directory (if they have one).
-	HomeDir string
-}
 
 func main() {
 	// create a tcp listener at port 4040
@@ -57,7 +35,7 @@ func main() {
 }
 
 func (s *server) Ruby(ctx context.Context, request *proto.Request) (*proto.Response, error) {
-	codeURL, params := request.GetCodeURL(), request.GetParams()
+	codeURL, args := request.GetCodeURL(), request.GetArgs()
 
 	/*
 		Code has to be downloaded in
@@ -67,7 +45,7 @@ func (s *server) Ruby(ctx context.Context, request *proto.Request) (*proto.Respo
 	// get home directory of current user
 	homeDir, err := user.Current()
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	// generate string for destination
 	destinationString := fmt.Sprintf("%s/remote/temp.rb", homeDir)
@@ -76,10 +54,20 @@ func (s *server) Ruby(ctx context.Context, request *proto.Request) (*proto.Respo
 	wget.Wget(codeURL, destinationString)
 
 	// TODO: execute the code with provided params
+	// get Command struct instance by passing command name and arguments
+	cmd := exec.Command("ruby", args...)
 
-	// TODO: Capture the output
+	// run the command and capture output
+	err = cmd.Run()
+	if err != nil {
+		return nil, err
+	}
 
-	// TODO: check if there was an error
+	// delete the code file
+	err = os.Remove(destinationString)
+	if err != nil {
+		log.Println(err)
+	}
 
 	// TODO: return the full response
 
