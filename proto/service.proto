@@ -10,10 +10,6 @@ message Response {
     string body = 2; // the body of the output
 }
 
-service Node {
-    rpc Exec(Request) returns (Response);
-}
-
-service Ruby {
-    rpc Exec(Request) returns (Response);
+service ExecService {
+    rpc Ruby(Request) returns (Response);
 }

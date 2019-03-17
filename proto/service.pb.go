@@ -126,7 +126,7 @@ func init() {
 func init() { proto.RegisterFile("service.proto", fileDescriptor_a0b84a42fa06f626) }
 
 var fileDescriptor_a0b84a42fa06f626 = []byte{
-	// 172 bytes of a gzipped FileDescriptorProto
+	// 167 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x2d, 0x4e, 0x2d, 0x2a,
 	0xcb, 0x4c, 0x4e, 0xd5, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x57, 0xb2, 0xe6, 0x62, 0x0f, 0x4a, 0x2d,
 	0x2c, 0x4d, 0x2d, 0x2e, 0x11, 0x92, 0xe0, 0x62, 0x4f, 0xce, 0x4f, 0x49, 0x0d, 0x0d, 0xf2, 0x91,
@@ -134,10 +134,10 @@ var fileDescriptor_a0b84a42fa06f626 = []byte{
 	0x73, 0x8b, 0x25, 0x98, 0x14, 0x98, 0x35, 0x38, 0x83, 0xa0, 0x3c, 0x25, 0x2b, 0x2e, 0x8e, 0xa0,
 	0xd4, 0xe2, 0x82, 0xfc, 0xbc, 0xe2, 0x54, 0x21, 0x29, 0x2e, 0x8e, 0x8c, 0xc4, 0x62, 0xd7, 0xa2,
 	0xa2, 0xfc, 0x22, 0xb0, 0x76, 0x8e, 0x20, 0x38, 0x5f, 0x48, 0x88, 0x8b, 0x25, 0x29, 0x3f, 0xa5,
-	0x52, 0x82, 0x09, 0x6c, 0x2c, 0x98, 0x6d, 0xa4, 0xcc, 0xc5, 0xe2, 0x97, 0x9f, 0x92, 0x2a, 0x24,
-	0xcd, 0xc5, 0xe2, 0x5a, 0x91, 0x9a, 0x2c, 0xc4, 0xa1, 0x07, 0x75, 0x87, 0x14, 0xa7, 0x1e, 0xcc,
-	0x50, 0x90, 0xa2, 0xa0, 0xd2, 0xa4, 0x4a, 0xbc, 0x8a, 0x92, 0xd8, 0xc0, 0x3e, 0x31, 0x06, 0x04,
-	0x00, 0x00, 0xff, 0xff, 0xdf, 0x1d, 0x82, 0xdb, 0xda, 0x00, 0x00, 0x00,
+	0x52, 0x82, 0x09, 0x6c, 0x2c, 0x98, 0x6d, 0xa4, 0xc5, 0xc5, 0xed, 0x5a, 0x91, 0x9a, 0x1c, 0x0c,
+	0x71, 0x8d, 0x90, 0x34, 0x17, 0x4b, 0x50, 0x69, 0x52, 0xa5, 0x10, 0x87, 0x1e, 0xd4, 0x39, 0x52,
+	0x9c, 0x7a, 0x30, 0xb3, 0x93, 0xd8, 0xc0, 0x6e, 0x35, 0x06, 0x04, 0x00, 0x00, 0xff, 0xff, 0x32,
+	0x43, 0xd5, 0xec, 0xbc, 0x00, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -148,144 +148,72 @@ var _ grpc.ClientConn
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion4
 
-// NodeClient is the client API for Node service.
+// ExecServiceClient is the client API for ExecService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type NodeClient interface {
-	Exec(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error)
+type ExecServiceClient interface {
+	Ruby(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error)
 }
 
-type nodeClient struct {
+type execServiceClient struct {
 	cc *grpc.ClientConn
 }
 
-func NewNodeClient(cc *grpc.ClientConn) NodeClient {
-	return &nodeClient{cc}
+func NewExecServiceClient(cc *grpc.ClientConn) ExecServiceClient {
+	return &execServiceClient{cc}
 }
 
-func (c *nodeClient) Exec(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error) {
+func (c *execServiceClient) Ruby(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
-	err := c.cc.Invoke(ctx, "/Node/Exec", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/ExecService/Ruby", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// NodeServer is the server API for Node service.
-type NodeServer interface {
-	Exec(context.Context, *Request) (*Response, error)
+// ExecServiceServer is the server API for ExecService service.
+type ExecServiceServer interface {
+	Ruby(context.Context, *Request) (*Response, error)
 }
 
-// UnimplementedNodeServer can be embedded to have forward compatible implementations.
-type UnimplementedNodeServer struct {
+// UnimplementedExecServiceServer can be embedded to have forward compatible implementations.
+type UnimplementedExecServiceServer struct {
 }
 
-func (*UnimplementedNodeServer) Exec(ctx context.Context, req *Request) (*Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Exec not implemented")
+func (*UnimplementedExecServiceServer) Ruby(ctx context.Context, req *Request) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Ruby not implemented")
 }
 
-func RegisterNodeServer(s *grpc.Server, srv NodeServer) {
-	s.RegisterService(&_Node_serviceDesc, srv)
+func RegisterExecServiceServer(s *grpc.Server, srv ExecServiceServer) {
+	s.RegisterService(&_ExecService_serviceDesc, srv)
 }
 
-func _Node_Exec_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ExecService_Ruby_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Request)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(NodeServer).Exec(ctx, in)
+		return srv.(ExecServiceServer).Ruby(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/Node/Exec",
+		FullMethod: "/ExecService/Ruby",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NodeServer).Exec(ctx, req.(*Request))
+		return srv.(ExecServiceServer).Ruby(ctx, req.(*Request))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-var _Node_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "Node",
-	HandlerType: (*NodeServer)(nil),
+var _ExecService_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "ExecService",
+	HandlerType: (*ExecServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Exec",
-			Handler:    _Node_Exec_Handler,
-		},
-	},
-	Streams:  []grpc.StreamDesc{},
-	Metadata: "service.proto",
-}
-
-// RubyClient is the client API for Ruby service.
-//
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type RubyClient interface {
-	Exec(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error)
-}
-
-type rubyClient struct {
-	cc *grpc.ClientConn
-}
-
-func NewRubyClient(cc *grpc.ClientConn) RubyClient {
-	return &rubyClient{cc}
-}
-
-func (c *rubyClient) Exec(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error) {
-	out := new(Response)
-	err := c.cc.Invoke(ctx, "/Ruby/Exec", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// RubyServer is the server API for Ruby service.
-type RubyServer interface {
-	Exec(context.Context, *Request) (*Response, error)
-}
-
-// UnimplementedRubyServer can be embedded to have forward compatible implementations.
-type UnimplementedRubyServer struct {
-}
-
-func (*UnimplementedRubyServer) Exec(ctx context.Context, req *Request) (*Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Exec not implemented")
-}
-
-func RegisterRubyServer(s *grpc.Server, srv RubyServer) {
-	s.RegisterService(&_Ruby_serviceDesc, srv)
-}
-
-func _Ruby_Exec_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Request)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(RubyServer).Exec(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/Ruby/Exec",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RubyServer).Exec(ctx, req.(*Request))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-var _Ruby_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "Ruby",
-	HandlerType: (*RubyServer)(nil),
-	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "Exec",
-			Handler:    _Ruby_Exec_Handler,
+			MethodName: "Ruby",
+			Handler:    _ExecService_Ruby_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

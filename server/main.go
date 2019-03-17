@@ -19,6 +19,10 @@ func main() {
 
 	// create new grpc server and register
 	srv := grpc.NewServer()
-	proto.RegisterRubyServer(srv, server{})
+	proto.RegisterExecServiceServer(srv, &server{})
 	reflection.Register(srv)
+
+	if e := srv.Serve(listener); e != nil {
+		panic(e)
+	}
 }
