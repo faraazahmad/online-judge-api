@@ -14,6 +14,7 @@ import (
 )
 
 func (s *server) Ruby(ctx context.Context, request *proto.Request) (*proto.Response, error) {
+	// extract the code URL and its arguments from the request
 	codeURL, args := request.GetCodeURL(), request.GetArgs()
 
 	/*
