@@ -1,6 +1,12 @@
 package main
 
-import "net"
+import (
+	"net"
+
+	proto "../proto"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
+)
 
 type server struct{}
 
@@ -10,4 +16,9 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	// create new grpc server and register
+	srv := grpc.NewServer()
+	proto.RegisterRubyServer(srv, server{})
+	reflection.Register(srv)
 }
