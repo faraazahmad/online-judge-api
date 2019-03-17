@@ -6,8 +6,7 @@ message Request {
 }
 
 message Response {
-    bool hasError = 1; // boolean to check whether the output has an error
-    bytes body = 2; // the body of the output
+    repeated bytes body = 2; // the body of the output
 }
 
 service ExecService {

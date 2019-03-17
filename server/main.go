@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"log"
@@ -57,6 +58,10 @@ func (s *server) Ruby(ctx context.Context, request *proto.Request) (*proto.Respo
 	// get Command struct instance by passing command name and arguments
 	cmd := exec.Command("ruby", args...)
 
+	var Stdout bytes.Buffer
+	// point cmd.Stdout to output buffer
+	cmd.Stdout = &Stdout
+
 	// run the command and capture output
 	err = cmd.Run()
 	if err != nil {
@@ -69,7 +74,6 @@ func (s *server) Ruby(ctx context.Context, request *proto.Request) (*proto.Respo
 		log.Println(err)
 	}
 
-	// TODO: return the full response
-
-	return nil, nil
+	// return full response
+	return &proto.Response{Body: Stdout.Bytes()}, nil
 }
