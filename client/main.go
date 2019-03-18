@@ -12,6 +12,7 @@ import (
 )
 
 func main() {
+	// connect to localhost:4040 without HTTPS
 	conn, err := grpc.Dial("localhost:4040", grpc.WithInsecure())
 	if err != nil {
 		panic(err)
@@ -21,13 +22,13 @@ func main() {
 	g := gin.Default()
 
 	g.GET("/ruby/:url/:args", func(ctx *gin.Context) {
-		url := ctx.Param("url")
+		codeURL := ctx.Param("url")
 		args := strings.Split(ctx.Param("args"), ",")
 
-		req := &proto.Request{CodeURL: url, Args: args}
+		req := &proto.Request{CodeURL: codeURL, Args: args}
 		if response, err := client.Ruby(ctx, req); err == nil {
 			ctx.JSON(http.StatusOK, gin.H{
-				"result": fmt.Sprintf("%d", response.Result),
+				"result": fmt.Sprintf("%s", response.Body),
 			})
 		} else {
 			ctx.JSON(http.StatusInternalServerError, gin.H{
