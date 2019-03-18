@@ -12,7 +12,7 @@ is a URL from where the raw code can be downloaded into a file. Only that
 URL containing the raw code can be sent as a parameter in the request.
 All other components are supposed to be sent in the request body.
 
-endpoint:   `api/ruby/:code_url`<br>
+endpoint:   `/ruby/:code_url`<br>
 method:     `GET`<br>
 body:       
 ```json
