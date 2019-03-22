@@ -21,7 +21,10 @@ func main() {
 	client := proto.NewExecServiceClient(conn)
 	g := gin.Default()
 
-	g.GET("/ruby/:url/:args", func(ctx *gin.Context) {
+	/*
+		Get URL from params and get stdin and args from body
+	*/
+	g.GET("/ruby/:url", func(ctx *gin.Context) {
 		codeURL := ctx.Param("url")
 		args := strings.Split(ctx.Param("args"), ",")
 
