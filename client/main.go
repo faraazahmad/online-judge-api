@@ -48,7 +48,7 @@ func main() {
 		stdin := ctx.PostForm("stdin")
 
 		// create protobuf request
-		req := &proto.Request{CodeURL: codeURL, Args: args, Stdin: stdin}
+		req := &proto.Request{CodeURL: codeURL, Args: args, Stdin: []byte(stdin)}
 	})
 
 	if err := g.Run(":8080"); err != nil {
