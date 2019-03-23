@@ -1,10 +1,7 @@
 package main
 
 import (
-	"fmt"
 	"log"
-	"net/http"
-	"strings"
 
 	proto "../proto"
 	"github.com/gin-gonic/gin"
@@ -18,25 +15,36 @@ func main() {
 		panic(err)
 	}
 
-	client := proto.NewExecServiceClient(conn)
+	_client := proto.NewExecServiceClient(conn)
 	g := gin.Default()
 
 	/*
-		Get URL from params and get stdin and args from body
+		Get codeURL, args and stdin from body
 	*/
-	g.GET("/ruby/:url", func(ctx *gin.Context) {
-		codeURL := ctx.Param("url")
-		args := strings.Split(ctx.Param("args"), ",")
+	g.GET("/ruby", func(ctx *gin.Context) {
+		/*
+			codeURL := ctx.Param("url")
+			args := strings.Split(ctx.Param("args"), ",")
 
-		req := &proto.Request{CodeURL: codeURL, Args: args}
-		if response, err := client.Ruby(ctx, req); err == nil {
-			ctx.JSON(http.StatusOK, gin.H{
-				"result": fmt.Sprintf("%s", response.Body),
-			})
-		} else {
-			ctx.JSON(http.StatusInternalServerError, gin.H{
-				"error": err.Error()})
-		}
+			req := &proto.Request{CodeURL: codeURL, Args: args}
+			if response, err := client.Ruby(ctx, req); err == nil {
+				ctx.JSON(http.StatusOK, gin.H{
+					"result": fmt.Sprintf("%s", response.Body),
+				})
+			} else {
+				ctx.JSON(http.StatusInternalServerError, gin.H{
+					"error": err.Error()})
+			}
+		*/
+
+		// get codeURL from request body
+		codeURL := ctx.PostForm("url")
+
+		// get args from request body
+		args := ctx.PostForm("args")
+
+		// get stdin from request body
+		Stdin := ctx.PostForm("stdin")
 	})
 
 	if err := g.Run(":8080"); err != nil {
