@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"strings"
 
 	proto "../proto"
 	"github.com/gin-gonic/gin"
@@ -15,7 +16,7 @@ func main() {
 		panic(err)
 	}
 
-	_client := proto.NewExecServiceClient(conn)
+	client := proto.NewExecServiceClient(conn)
 	g := gin.Default()
 
 	/*
@@ -40,11 +41,12 @@ func main() {
 		// get codeURL from request body
 		codeURL := ctx.PostForm("url")
 
-		// get args from request body
-		args := ctx.PostForm("args")
+		// get args from request body and split into []string
+		args := strings.Split(ctx.PostForm("args"), ",")
 
 		// get stdin from request body
 		Stdin := ctx.PostForm("stdin")
+
 	})
 
 	if err := g.Run(":8080"); err != nil {
