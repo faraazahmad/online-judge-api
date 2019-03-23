@@ -45,8 +45,10 @@ func main() {
 		args := strings.Split(ctx.PostForm("args"), ",")
 
 		// get stdin from request body
-		Stdin := ctx.PostForm("stdin")
+		stdin := ctx.PostForm("stdin")
 
+		// create protobuf request
+		req := &proto.Request{CodeURL: codeURL, Args: args, Stdin: stdin}
 	})
 
 	if err := g.Run(":8080"); err != nil {
