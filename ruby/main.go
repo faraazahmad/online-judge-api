@@ -1,8 +1,12 @@
-package main
+package ruby
 
 import (
+	"net/http"
+	"strings"
+
 	proto "../proto"
 	"../wget"
+	"github.com/gin-gonic/gin"
 
 	"bytes"
 	"context"
@@ -13,7 +17,9 @@ import (
 	"os/user"
 )
 
-func (s *server) Ruby(ctx context.Context, request *proto.Request) (*proto.Response, error) {
+type server struct{}
+
+func (s *server) run(ctx context.Context, request *proto.Request) (*proto.Response, error) {
 	// extract the code URL and its arguments from the request
 	codeURL, args := request.GetCodeURL(), request.GetArgs()
 
@@ -57,4 +63,30 @@ func (s *server) Ruby(ctx context.Context, request *proto.Request) (*proto.Respo
 
 	// return full response
 	return &proto.Response{Body: Stdout.Bytes()}, nil
+}
+
+func handler(ctx *gin.Context) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		// get codeURL from request body
+		codeURL := ctx.PostForm("url")
+
+		// get args from request body and split into []string
+		args := strings.Split(ctx.PostForm("args"), ",")
+
+		// get stdin from request body
+		stdin := ctx.PostForm("stdin")
+
+		// create protobuf request
+		req := &proto.Request{CodeURL: codeURL, Args: args, Stdin: []byte(stdin)}
+
+		// send request and get response, error
+		if response, err := run(ctx, req); err == nil {
+			ctx.JSON(http.StatusOK, gin.H{
+				"result": fmt.Sprintf("%s", response.Body),
+			})
+		} else {
+			ctx.JSON(http.StatusInternalServerError, gin.H{
+				"error": err.Error()})
+		}
+	}
 }
