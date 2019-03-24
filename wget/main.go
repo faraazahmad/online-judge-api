@@ -2,7 +2,6 @@ package wget
 
 import (
 	"bufio"
-	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -16,7 +15,6 @@ const (
 // Wget : rite results of a GET request to file. If a fileName is given an empty string then the
 // last chunk of the input url is used as a filename. Eg: http://foo/baz.jar => baz.jar
 func Wget(url, fileName string) {
-	fmt.Println(url)
 	resp := getResponse(url)
 	if fileName == "" {
 		urlSplit := strings.Split(url, "/")

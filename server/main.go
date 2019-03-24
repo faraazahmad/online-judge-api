@@ -29,7 +29,7 @@ func (s *server) Ruby(ctx context.Context, request *proto.Request) (*proto.Respo
 	*/
 
 	// get home directory of current user
-	homeDir, err := user.Current()
+	currentUser, err := user.Current()
 	if err != nil {
 		return nil, err
 	}
@@ -38,7 +38,7 @@ func (s *server) Ruby(ctx context.Context, request *proto.Request) (*proto.Respo
 	t := time.Now().Format("20060102150405")
 
 	// generate string for destination (in UNIX based systems)
-	destinationString := fmt.Sprintf("%s/rpc/ruby/code-%s.rb", homeDir, t)
+	destinationString := fmt.Sprintf("%s/rpc/ruby/code-%s.rb", currentUser.HomeDir, t)
 
 	// download file in the provided destination
 	wget.Wget(codeURL, destinationString)

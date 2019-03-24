@@ -48,8 +48,6 @@ func main() {
 		err := ctx.BindJSON(&requestJSON)
 		checkError(err, http.StatusInternalServerError, ctx)
 
-		fmt.Println(requestJSON)
-
 		// assign code URL
 		codeURL := requestJSON.URL
 
