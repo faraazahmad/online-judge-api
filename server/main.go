@@ -43,11 +43,11 @@ func (s *server) Ruby(ctx context.Context, request *proto.Request) (*proto.Respo
 	// download file in the provided destination
 	wget.Wget(codeURL, destinationString)
 
-	// generate main commmand (without args)
-	mainCmd := fmt.Sprintf("ruby %s", destinationString)
+	// append location of file to arguments list
+	args = append([]string{destinationString}, args...)
 
 	// get Command struct instance by passing command name and arguments
-	cmd := exec.Command(mainCmd, args...)
+	cmd := exec.Command("ruby", args...)
 
 	// provide stdin to command
 	cmd.Stdin = bytes.NewReader(request.GetStdin())
