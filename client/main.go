@@ -11,6 +11,22 @@ import (
 	"google.golang.org/grpc"
 )
 
+// Request : A structre to hold request info
+type Request struct {
+	URL   string `json:"url"`
+	Args  string `json:"args"`
+	Stdin string `json:"string"`
+}
+
+// DRY function to handle errors
+func checkError(err error, errorCode int, ctx *gin.Context) {
+	if err != nil {
+		ctx.JSON(errorCode, gin.H{
+			"error": err.Error(),
+		})
+	}
+}
+
 func main() {
 	// connect to localhost:4040 without HTTPS
 	conn, err := grpc.Dial("localhost:4040", grpc.WithInsecure())
@@ -25,14 +41,21 @@ func main() {
 		Get codeURL, args and stdin from body
 	*/
 	g.GET("/ruby", func(ctx *gin.Context) {
-		// get codeURL from request body
-		codeURL := ctx.PostForm("url")
+		// struct instance to store request body
+		var requestJSON Request
 
-		// get args from request body and split into []string
-		args := strings.Split(ctx.PostForm("args"), ",")
+		// return error if there was an error in binding JSON
+		err := ctx.BindJSON(&requestJSON)
+		checkError(err, http.StatusInternalServerError, ctx)
 
-		// get stdin from request body
-		stdin := ctx.PostForm("stdin")
+		// assign code URL
+		codeURL := requestJSON.URL
+
+		// get args and split into []string
+		args := strings.Split(requestJSON.Args, ",")
+
+		// get stdin
+		stdin := requestJSON.Stdin
 
 		// create protobuf request
 		req := &proto.Request{CodeURL: codeURL, Args: args, Stdin: []byte(stdin)}
