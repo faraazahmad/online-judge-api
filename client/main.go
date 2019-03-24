@@ -26,19 +26,22 @@ func main() {
 	*/
 	g.GET("/ruby", func(ctx *gin.Context) {
 		// get codeURL from request body
-		codeURL := ctx.PostForm("url")
+		codeURL := ctx.MustGet("url").(string)
 
 		// get args from request body and split into []string
-		args := strings.Split(ctx.PostForm("args"), ",")
+		args := strings.Split(ctx.MustGet("args").(string), ",")
 
 		// get stdin from request body
-		stdin := ctx.PostForm("stdin")
+		stdin := ctx.MustGet("stdin").(string)
+
+		log.Println(ctx)
+		log.Println(ctx)
 
 		// create protobuf request
 		req := &proto.Request{CodeURL: codeURL, Args: args, Stdin: []byte(stdin)}
 
 		// send request and get response, error
-		if response, err := Ruby(ctx, req); err == nil {
+		if response, err := client.Ruby(ctx, req); err == nil {
 			ctx.JSON(http.StatusOK, gin.H{
 				"result": fmt.Sprintf("%s", response.Body),
 			})
@@ -48,7 +51,12 @@ func main() {
 		}
 	})
 
+	g.GET("/test", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, ctx)
+	})
+
 	if err := g.Run(":8080"); err != nil {
 		log.Fatalf("Failed to run server: %v", err)
 	}
+
 }
