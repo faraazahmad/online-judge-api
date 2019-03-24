@@ -26,16 +26,13 @@ func main() {
 	*/
 	g.GET("/ruby", func(ctx *gin.Context) {
 		// get codeURL from request body
-		codeURL := ctx.MustGet("url").(string)
+		codeURL := ctx.PostForm("url")
 
 		// get args from request body and split into []string
-		args := strings.Split(ctx.MustGet("args").(string), ",")
+		args := strings.Split(ctx.PostForm("args"), ",")
 
 		// get stdin from request body
-		stdin := ctx.MustGet("stdin").(string)
-
-		log.Println(ctx)
-		log.Println(ctx)
+		stdin := ctx.PostForm("stdin")
 
 		// create protobuf request
 		req := &proto.Request{CodeURL: codeURL, Args: args, Stdin: []byte(stdin)}
