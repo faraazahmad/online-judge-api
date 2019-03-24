@@ -2,11 +2,12 @@ package wget
 
 import (
 	"bufio"
-	"fmt"
 	"io"
 	"net/http"
 	"os"
 	"strings"
+
+	"golang.org/x/net/http2"
 )
 
 const (
@@ -27,10 +28,13 @@ func Wget(url, fileName string) {
 // Make the GET request to a url, return the response
 func getResponse(url string) *http.Response {
 	tr := new(http.Transport)
+	// configure transport for HTTPS and check for error
+	errorChecker(http2.ConfigureTransport(tr))
+	// create client using Transport
 	client := &http.Client{Transport: tr}
+	// get response and check for error
 	resp, err := client.Get(url)
 	errorChecker(err)
-	fmt.Println(resp)
 	return resp
 }
 
