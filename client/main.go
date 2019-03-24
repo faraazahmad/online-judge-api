@@ -15,7 +15,7 @@ import (
 type Request struct {
 	URL   string `json:"url"`
 	Args  string `json:"args"`
-	Stdin string `json:"string"`
+	Stdin string `json:"stdin"`
 }
 
 // DRY function to handle errors
@@ -47,6 +47,8 @@ func main() {
 		// return error if there was an error in binding JSON
 		err := ctx.BindJSON(&requestJSON)
 		checkError(err, http.StatusInternalServerError, ctx)
+
+		fmt.Println(requestJSON)
 
 		// assign code URL
 		codeURL := requestJSON.URL
