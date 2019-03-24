@@ -25,7 +25,7 @@ func (s *server) Ruby(ctx context.Context, request *proto.Request) (*proto.Respo
 
 	/*
 		Code has to be downloaded in
-		/home/${whoami}/remote/ruby/temp.rb
+		/home/${whoami}/remote/ruby/code-#{time.Now()}.rb
 	*/
 
 	// get home directory of current user
