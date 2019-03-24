@@ -51,10 +51,6 @@ func main() {
 		}
 	})
 
-	g.GET("/test", func(ctx *gin.Context) {
-		ctx.JSON(http.StatusOK, ctx)
-	})
-
 	if err := g.Run(":8080"); err != nil {
 		log.Fatalf("Failed to run server: %v", err)
 	}
