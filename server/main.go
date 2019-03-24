@@ -36,8 +36,9 @@ func (s *server) Ruby(ctx context.Context, request *proto.Request) (*proto.Respo
 
 	// get and format current time for every request
 	t := time.Now().Format("20060102150405")
+
 	// generate string for destination (in UNIX based systems)
-	destinationString := fmt.Sprintf("%s/remote/ruby/request-%s/code.rb", homeDir, t)
+	destinationString := fmt.Sprintf("%s/remote/ruby/code-%s.rb", homeDir, t)
 
 	// download file in the provided destination
 	wget.Wget(codeURL, destinationString)
