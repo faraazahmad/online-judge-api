@@ -27,3 +27,17 @@ body:
 ```
 
 ### Response format
+
+If the response has HTTP status 200 (OK), the response will have the following body
+```json
+{
+    "result": ""
+}
+```
+
+else the response will have HTTP status 500 (Internal server error) and the following body
+```json
+{
+    "error": ""
+}
+```
