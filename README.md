@@ -1,9 +1,9 @@
-# grpc-code-execution
-a GRPC API and server to execute code remotely and return output/error.
+# Online judge API
+a gRPC API to execute code remotely and return output/error.
 
 ## Currently supported languages
 
-### Ruby
+### 1. Ruby
 
 #### Request format
 
