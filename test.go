@@ -1,10 +1,9 @@
 package main
 
 import (
-	"os/user"
-	"fmt"
+	wget "./wget"
 )
 
 func main() {
-	fmt.Println(user.Current())
+	wget.Wget("https://pastebin.com/raw/FLt4jxHJ", "./test_file")
 }

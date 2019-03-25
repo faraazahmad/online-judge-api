@@ -1,0 +1,2 @@
+str = gets
+puts "This is the string: #{str}"
