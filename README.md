@@ -7,17 +7,23 @@ a GRPC API and server to execute code remotely and return output/error.
 
 #### Request format
 
-The server requires three key components from the client request. `code_url` 
-is a URL from where the raw code can be downloaded into a file. Only that 
-URL containing the raw code can be sent as a parameter in the request.
-All other components are supposed to be sent in the request body.
-
-endpoint:   `/ruby/:code_url`<br>
+endpoint:   `/ruby`<br>
 method:     `GET`<br>
+
+The server requires three components from the client request. 
+* `url` :   A URL where the code is stored in raw format. For example ,
+            https://pastebin.com/raw/FLt4jxHJ
+* `args`:   Arguments to be passed to the interpreter for running the code.
+            For example, `-a`, `-c` etc.
+* `stdin`:  The input to be provided to the code (including newlines).
+
 body:       
 ```json
 {
-    "args": [],     // array of strings
-    "stdin": ""     // string
+    "url": "",
+    "args": "",
+    "stdin": ""
 }
 ```
+
+### Response format
