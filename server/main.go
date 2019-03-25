@@ -20,8 +20,8 @@ import (
 type server struct{}
 
 func (s *server) Ruby(ctx context.Context, request *proto.Request) (*proto.Response, error) {
-	// extract the code URL and its arguments from the request
-	codeURL, args := request.GetCodeURL(), request.GetArgs()
+	// extract the code URL, args, and stdin from request
+	codeURL, args, stdin := request.GetCodeURL(), request.GetArgs(), request.GetStdin()
 
 	/*
 		Code has to be downloaded in
@@ -43,14 +43,22 @@ func (s *server) Ruby(ctx context.Context, request *proto.Request) (*proto.Respo
 	// download file in the provided destination
 	wget.Wget(codeURL, destinationString)
 
-	// append location of file to arguments list
-	args = append(args, destinationString)
+	/*
+		If no arguments were provided, only leave the
+		destinationString in the args slice otherwise
+		append location of file to arguments list
+	*/
+	if args[0] == "" {
+		args = []string{destinationString}
+	} else {
+		args = append(args, destinationString)
+	}
 
 	// get Command struct instance by passing command name and arguments
 	cmd := exec.Command("ruby", args...)
 
 	// provide stdin to command
-	cmd.Stdin = bytes.NewReader(request.GetStdin())
+	cmd.Stdin = bytes.NewReader(stdin)
 
 	// store cmd.Stdout in a Bytes buffer
 	var Stdout bytes.Buffer
