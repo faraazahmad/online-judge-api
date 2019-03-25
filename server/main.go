@@ -44,7 +44,7 @@ func (s *server) Ruby(ctx context.Context, request *proto.Request) (*proto.Respo
 	wget.Wget(codeURL, destinationString)
 
 	// append location of file to arguments list
-	args = append([]string{destinationString}, args...)
+	args = append(args, destinationString)
 
 	// get Command struct instance by passing command name and arguments
 	cmd := exec.Command("ruby", args...)
