@@ -1,6 +1,21 @@
-package main
+package server
 
-func (s *Server) Ruby(ctx context.Context, request *proto.Request) (*proto.Response, error) {
+import (
+	"bytes"
+	"context"
+	"fmt"
+	"log"
+	"os"
+	"os/exec"
+	"os/user"
+	"time"
+
+	proto "github.com/faraazahmad/online_judge_api/proto"
+	"github.com/faraazahmad/online_judge_api/wget"
+)
+
+// Compiled - function to get, compile, run code and return its result
+func (s *Server) Compiled(ctx context.Context, request *proto.Request) (*proto.Response, error) {
 	// extract the code URL, args, and stdin from request
 	codeURL, args, stdin := request.GetCodeURL(), request.GetArgs(), request.GetStdin()
 

@@ -1,18 +1,9 @@
-package main
+package server
 
 import (
-	"bytes"
-	"context"
-	"fmt"
-	"log"
 	"net"
-	"os"
-	"os/exec"
-	"os/user"
-	"time"
 
-	proto "../proto"
-	"../wget"
+	proto "github.com/faraazahmad/online_judge_api/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
