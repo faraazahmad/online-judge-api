@@ -11,5 +11,6 @@ message Response {
 }
 
 service ExecService {
-    rpc Ruby(Request) returns (Response);
+    rpc Interpreted(Request) returns (Response);
+    rpc Compiled(Request) returns (Response);
 }
