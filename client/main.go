@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 
-	proto "../proto"
+	proto "github.com/faraazahmad/online_judge_api/proto"
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
 )
